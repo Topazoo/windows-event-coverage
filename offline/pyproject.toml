@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "windows-evidence-offline"
+version = "0.1.0"
+description = "Offline Windows evidence parsers with explicit uncertainty and integrity checks"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+dependencies = []
+
+[project.scripts]
+windows-evidence = "win_evidence.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["win_evidence*"]

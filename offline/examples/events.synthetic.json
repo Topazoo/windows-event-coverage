@@ -1,0 +1,5 @@
+[
+  {"Channel": "Synthetic", "RecordId": 1, "TimeUtc": "2025-01-01T00:29:00Z", "Provider": "ExampleService", "Id": 1000, "Level": 2},
+  {"Channel": "Synthetic", "RecordId": 2, "TimeUtc": "2025-01-01T00:30:00.0000001Z", "Provider": "ExampleReporter", "Id": 1001, "Level": 4},
+  {"Channel": "Synthetic", "RecordId": 3, "TimeUtc": "2025-01-01T00:45:00Z", "Provider": "ExampleService", "Id": 1000, "Level": 2}
+]
