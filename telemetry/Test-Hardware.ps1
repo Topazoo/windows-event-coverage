@@ -30,6 +30,7 @@ try {
     $global:telemetryTestFailGraphics = $true
     $partial = Join-Path $directory 'partial.json'
     & $collector -Collect -OutputPath $partial
+    if ($LASTEXITCODE -ne 2) { throw 'Partial result must exit 2' }
     $data = Get-Content -LiteralPath $partial -Raw | ConvertFrom-Json
     if (@($data.components | Where-Object status -eq 'failed').Count -ne 1) { throw 'Failure coverage missing' }
     Write-Output 'Passed: plan, four mocked queries, property allowlist, exclusive output, failed component.'

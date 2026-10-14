@@ -70,5 +70,20 @@ class TelemetryTests(unittest.TestCase):
             self.assertEqual(run.returncode, 1)
             self.assertEqual(output.read_text(), 'keep')
 
+    def test_cli_synthetic_dashboard(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(t.__file__).parent
+            output = Path(directory) / 'sensors.json'
+            run = subprocess.run([sys.executable, str(root/'telemetry.py'), 'sensors',
+                                  str(root/'examples/sensors.synthetic.csv'), '--output', str(output)], capture_output=True)
+            self.assertEqual(run.returncode, 0, run.stderr)
+            self.assertEqual(len(json.loads(output.read_text())['samples']), 2)
+            view = Path(directory) / 'dashboard.html'
+            run = subprocess.run([sys.executable, str(root/'telemetry.py'), 'dashboard',
+                                  '--sensors', str(output), '--hardware', str(root/'examples/hardware.synthetic.json'),
+                                  '--output', str(view)], capture_output=True)
+            self.assertEqual(run.returncode, 0, run.stderr)
+            self.assertIn('Synthetic CPU', view.read_text())
+
 
 if __name__ == '__main__': unittest.main()
