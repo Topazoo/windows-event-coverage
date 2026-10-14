@@ -1,0 +1,6 @@
+state/
+*.tmp
+*.evtx
+*.dmp
+*.zip
+test-results/

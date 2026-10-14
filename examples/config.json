@@ -1,0 +1,9 @@
+{
+  "StartUtc": "2025-01-01T00:00:00Z",
+  "PageSize": 500,
+  "RecordCap": 50000,
+  "Channels": [
+    { "Name": "System", "Predicate": "Level<=3 or EventID=6005" },
+    { "Name": "Application", "Predicate": "Level<=3" }
+  ]
+}

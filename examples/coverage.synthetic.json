@@ -1,0 +1,27 @@
+{
+  "SchemaVersion": 1,
+  "ThroughUtc": "2025-01-01T01:00:00Z",
+  "Channels": [
+    {
+      "Channel": "Synthetic",
+      "FromUtc": "2025-01-01T00:00:00Z",
+      "ThroughUtc": "2025-01-01T01:00:00Z",
+      "Status": "complete-with-gaps",
+      "SelectedRecords": 0,
+      "Gaps": ["retention-start-after-window-start"],
+      "Error": null,
+      "Snapshot": {"OldestId": 5, "NewestId": 10, "OldestUtc": "2025-01-01T00:10:00Z"}
+    },
+    {
+      "Channel": "SyntheticDenied",
+      "FromUtc": "2025-01-01T00:00:00Z",
+      "ThroughUtc": "2025-01-01T01:00:00Z",
+      "Status": "denied",
+      "SelectedRecords": 0,
+      "Gaps": [],
+      "Error": "Synthetic denial",
+      "Snapshot": null
+    }
+  ],
+  "Events": []
+}
