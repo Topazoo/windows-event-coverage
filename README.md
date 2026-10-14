@@ -1,11 +1,12 @@
 # Windows Event Coverage
 
-Collect Windows event metadata with explicit coverage gaps, then analyze saved evidence offline. The repository has two independent components:
+Collect Windows event metadata with explicit coverage gaps, then analyze saved evidence offline. Optional hardware inventory and saved sensor views are separate operations:
 
 | Component | Purpose | Runtime |
 |---|---|---|
 | **Collector** — root PowerShell scripts | Read bounded event windows, retry failed channels, and save per-channel checkpoints and coverage receipts. | Live collection: Windows with PowerShell 7.2+. |
 | **Offline analysis** — [`offline/`](offline/) | Parse explicit event, WER, saved-debugger and minidump metadata files; validate evidence manifests; produce noncausal correlation reports. | Python 3.10+, standard library only. Hardened manifest verification requires WSL/Linux/POSIX. |
+| **Hardware and sensors** - [`telemetry/`](telemetry/) | Explicit opt-in CIM inventory, bounded saved sensor CSV ingestion and a passive local HTML dashboard. | Inventory: Windows PowerShell 7.2+. Import/view: Python 3.10+, standard library only. |
 
 Collection and analysis are separate operations. The Python package never queries live Windows logs, invokes a debugger, discovers files, elevates privileges or advances collector checkpoints. Neither component diagnoses a crash cause or certifies system health. No private diagnostic logs, real dumps or debugger binaries are bundled.
 
@@ -59,6 +60,8 @@ This command requires **WSL/Linux/POSIX directory-descriptor support**. It rejec
 See the [offline CLI and limits](offline/README.md), [schema reference](offline/SCHEMAS.md), and [test coverage](offline/TESTING.md). Offline exit codes are 0 for complete processing, 2 for partial results/warnings, and 1 for fatal input/I/O failures; argument syntax errors also use code 2 with usage text.
 
 ## Development and validation
+
+For the optional hardware/sensor workflow, see [telemetry usage, formats and limits](telemetry/README.md). Sensor support imports existing CSV exports; live sensor capture is not included. Dashboard generation uses saved inputs and starts no server. Run its synthetic suite with `python -m unittest discover -s telemetry -p 'test_*.py' -v`.
 
 ```powershell
 # Collector synthetic tests, from the repository root
