@@ -1,0 +1,6 @@
+EventType=APPCRASH
+ReportIdentifier={00000000-0000-0000-0000-000000000001}
+AppName=Example.exe
+AppVersion=1.2.3.4
+Sig[12].Name=Example signature
+Sig[12].Value=Synthetic value
