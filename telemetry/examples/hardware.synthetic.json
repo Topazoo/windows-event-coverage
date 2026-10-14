@@ -1,0 +1,1 @@
+{"schema":"hardware-inventory-v1","startedUTC":"2025-01-01T12:00:00Z","completedUTC":"2025-01-01T12:00:01Z","components":[{"component":"cpu","status":"read","rows":[{"Name":"Synthetic CPU","NumberOfCores":4,"NumberOfLogicalProcessors":8}]},{"component":"graphics","status":"failed","rows":[]}],"limits":"Invented example; failed graphics remain unknown."}

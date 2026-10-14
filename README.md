@@ -1,13 +1,14 @@
 # Windows Event Coverage
 
-Collect Windows event metadata with explicit coverage gaps, then analyze saved evidence offline. The repository has two independent components:
+Collect Windows event metadata with explicit coverage gaps, then analyze saved evidence offline. Optional hardware inventory and saved sensor views are separate operations:
 
 | Component | Purpose | Runtime |
 |---|---|---|
 | **Collector** — root PowerShell scripts | Read bounded event windows, retry failed channels, and save per-channel checkpoints and coverage receipts. | Live collection: Windows with PowerShell 7.2+. |
 | **Offline analysis** — [`offline/`](offline/) | Parse explicit event, WER, saved-debugger and minidump metadata files; validate evidence manifests; produce noncausal correlation reports. | Python 3.10+, standard library only. Hardened manifest verification requires WSL/Linux/POSIX. |
+| **Hardware and sensors** - [`telemetry/`](telemetry/) | Explicit opt-in CIM inventory, bounded saved sensor CSV ingestion and a passive local HTML dashboard. | Inventory: Windows PowerShell 7.2+. Import/view: Python 3.10+, standard library only. |
 
-Collection and analysis are separate operations. The Python package never queries live Windows logs, invokes a debugger, discovers files, elevates privileges or advances collector checkpoints. Neither component diagnoses a crash cause or certifies system health. No private diagnostic logs, real dumps or debugger binaries are bundled.
+Collection and analysis are separate operations. The Python tools never query live Windows logs, invoke a debugger, discover files, elevate privileges or advance collector checkpoints. No component diagnoses a crash cause or certifies system health. No private diagnostic logs, real dumps or debugger binaries are bundled.
 
 ## Collect an explicit event window
 
@@ -60,6 +61,8 @@ See the [offline CLI and limits](offline/README.md), [schema reference](offline/
 
 ## Development and validation
 
+For the optional hardware/sensor workflow, see [telemetry usage, formats and limits](telemetry/README.md). Sensor support imports existing CSV exports; live sensor capture is not included. Dashboard generation uses saved inputs and starts no server. Run its synthetic suite with `python -m unittest discover -s telemetry -p 'test_*.py' -v`.
+
 ```powershell
 # Collector synthetic tests, from the repository root
 pwsh -NoProfile -File ./tests/Run-Tests.ps1
@@ -70,7 +73,7 @@ python -m unittest discover -s offline/tests -t offline -v
 
 Alternatively, enter `offline/` and run `python3 -m unittest discover -s tests -v`. From WSL, [`tests/run-wsl.sh`](tests/run-wsl.sh) runs the collector suite with an existing PowerShell runtime; Windows interoperability is labeled explicitly when used.
 
-The required GitHub checks retain their names: `synthetic (windows-latest)` and `synthetic (ubuntu-latest)`. Each runs the existing collector suite and the offline Python 3.12 suite. POSIX manifest tests run on Ubuntu and explicitly skip on Windows; a separate fail-closed contract test runs on both. Workflow permissions remain read-only, actions are pinned, and checkout credentials are not persisted. See [Actions](https://github.com/Topazoo/windows-event-coverage/actions) for the result of each commit.
+The required GitHub checks retain their names: `synthetic (windows-latest)` and `synthetic (ubuntu-latest)`. Each runs the existing collector suite, offline Python 3.12 suite and telemetry suite. Mocked hardware collection runs on Windows; Ubuntu checks the plan-only default. POSIX manifest tests run on Ubuntu and explicitly skip on Windows; a separate fail-closed contract test runs on both. Workflow permissions remain read-only, actions are pinned, and checkout credentials are not persisted. See [Actions](https://github.com/Topazoo/windows-event-coverage/actions) for the result of each commit.
 
 Local development validation used native WSL Python 3.12.3 and generated evidence only. Test minidumps are assembled in temporary directories. Synthetic tests do not establish compatibility with every real Windows export, WER/debugger variant, Python version or filesystem. No real-event collection, protected read, restart trial, symbol-resolution test or exhaustive security audit is part of this integration. Live collection remains Windows-only; offline manifest verification remains POSIX-only.
 
@@ -78,4 +81,4 @@ Keep actual inputs and outputs private. Payload opt-ins are not anonymization. P
 
 ## License and provenance
 
-MIT; see [LICENSE](LICENSE). Both components are original implementations of requirements developed during a private investigation. No private investigation artifacts or third-party implementations are bundled. The offline package records its scope in [PROVENANCE.md](offline/PROVENANCE.md); third-party runtimes and any user-supplied evidence retain their own licenses.
+MIT; see [LICENSE](LICENSE). These components are original implementations of requirements developed during a private investigation. No private investigation artifacts or third-party implementations are bundled. The offline package records its scope in [PROVENANCE.md](offline/PROVENANCE.md); third-party runtimes and any user-supplied evidence retain their own licenses.
