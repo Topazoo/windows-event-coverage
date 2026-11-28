@@ -1,6 +1,12 @@
 # Windows Event Coverage
 
-Collect Windows event metadata with explicit coverage gaps, then analyze saved evidence offline. Optional hardware inventory and saved sensor views are separate operations:
+Collect Windows event metadata for offline investigation without hiding gaps in the collection. If one channel cannot be read, successful channels can advance while the failed channel keeps its checkpoint for a retry.
+
+For example, a report can contain events from the System channel while showing that the Application channel was unavailable. That missing interval remains part of the evidence; an empty result does not mean no events occurred.
+
+The PowerShell collector runs on Windows. Python tools analyze saved files separately. Start with the synthetic examples below if you want to explore the output without collecting logs from your machine.
+
+Optional hardware inventory and saved sensor views are separate operations:
 
 | Component | Purpose | Runtime |
 |---|---|---|
